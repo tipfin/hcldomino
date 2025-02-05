@@ -1,27 +1,23 @@
-#### Deployment Notes for Cloudflare Integration with HCL Domino Server Setup
+## Deployment Notes for Cloudflare Integration with HCL Domino Server Setup
 
 These notes are from a deployment done in 2024.
 
-##### Deployment of HCL Domino v12 or v14 server(s) on VPS
+### Deployment of HCL Domino v12 or v14 server(s) on VPS
 
 <table>
 <tr>
 <th>
 Location
 </th>
-
 <th>
 Server Final Name
 </th>
-
 <th>
 Linux Host FQDN
 </th>
-
 <th>
 IP Address
 </th>
-
 <th>
 Remarks
 </th>
@@ -31,19 +27,15 @@ Remarks
 <td>
 VPS1 AlmaLinux9
 </td>
-
 <td>
 S1/ACME
 </td>
-
 <td>
 s1.acme.org
 </td>
-
 <td>
 Private: ppp.qqq.rrr.sss
 </td>
-
 <td>
 First server, AdminP server, CA server, ID vault, CertMgr server
 </td>
@@ -53,19 +45,15 @@ First server, AdminP server, CA server, ID vault, CertMgr server
 <td>
 VPS2 AlmaLinux9
 </td>
-
 <td>
 S2/ACME
 </td>
-
 <td>
 s2.acme.org
 </td>
-
 <td>
 Public: aaa.bbb.ccc.ddd 
 </td>
-
 <td>
 Additional server, Web & App server, Router, HTTP, CertMgr client
 </td>
@@ -75,33 +63,28 @@ Additional server, Web & App server, Router, HTTP, CertMgr client
 <td>
 VPS3 AlmaLinux9
 </td>
-
 <td>
 S3/ACME
 </td>
-
 <td>
 s3.acme.org
 </td>
-
 <td>
 Public: eee.fff.ggg.hhh
 </td>
-
 <td>
 Additional server, Mail server,  Router, HTTP, POP. IMAP, SMTP, CertMgr client
 </td>
 </tr>
 </table>
 
-Domino installation directories:
+#### Domino installation directories:
 
 <table>
 <tr>
 <th>
 Server
 </th>
-
 <th>
 Sx/ACME
 </th>
@@ -160,7 +143,7 @@ KeepassXC or Veracrypt can be used by admins as secure repository for certificat
 
 The repositories can be stored securely in a bucket on Cloudflare R2, the high-performance storage for files and objects with zero egress charges. Manage through S3 API, public URL access not allowed
 
-##### Configure Cloudflare DNS for acme.org domain for use with HCL Domino 14 server(s) on VPS
+### Configure Cloudflare DNS for acme.org domain for use with HCL Domino 14 server(s) on VPS
 
 Subscribe to acme.org domain through Cloudflare or any other registrar
 
@@ -317,35 +300,35 @@ Auto
 
 NS    xx.ns.cloudflare.com    yy.ns.cloudflare.com
 
-###### Create API tokens, view Global API key, Origin CA key
+#### Create API tokens, view Global API key, Origin CA key
 
 [https://dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens)
 
 Cloudflare root and other certificates, Global API key, Origin CA key, Origin Server key to be stored securely.
 
-###### DNSSEC - Enabled
+#### DNSSEC - Enabled
 
 DNSSEC protects against forged DNS answers. DNSSEC protected zones are cryptographically signed to ensure the DNS records received are identical to the DNS records published by the domain owner.
 
-###### CNAME Flattening - Done
+#### CNAME Flattening - Done
 
 Cloudflare will follow a CNAME to where it points and return that IP address instead of the CNAME record. By default, Cloudflare will only flatten the CNAME at the root of your domain.
 
 Flatten CNAME at root acme.org
 
-###### Automatic HTTPS Rewrites - Enabled
+#### Automatic HTTPS Rewrites - Enabled
 
 Automatic HTTPS Rewrites helps fix mixed content by changing “http” to “https” for all resources or links on your web site that can be served with HTTPS.
 
-###### Always Use HTTPS - Enabled
+#### Always Use HTTPS - Enabled
 
 Redirect all requests with scheme “http” to “https”. This applies to all http requests to the zone.
 
-###### Brotli - Enabled
+#### Brotli - Enabled
 
 Speed up page load times for your visitor’s HTTPS traffic by applying Brotli compression.
 
-###### SSL/TLS
+#### SSL/TLS
 
 Advanced Certificate Manager - Universal SSL (current plan) $0.00 / month
 
@@ -412,7 +395,7 @@ Certificate validation method - TXT
 
 Certificate Authority - Let's Encrypt
 
-###### Client Certificates
+#### Client Certificates
 
 Create client certificates using Cloudflare public key infrastructure (PKI).
 
@@ -420,7 +403,7 @@ Secure and authenticate your APIs and web applications with client certificates.
 
 Hosts - Choose which host(s) you wish to enable mTLS (preferably hosts used for admin purpose)
 
-###### SSL/TLS encryption mode is Full (strict)
+#### SSL/TLS encryption mode is Full (strict)
 
 Encrypts end-to-end but requires a trusted CA or Cloudflare Origin CA certificate on the server. 
 
@@ -468,9 +451,9 @@ Receive an email when a Certificate Authority issues a certificate for your doma
 
 Disable Universal SSL - No
 
-##### Security
+#### Security
 
-###### WAF
+##### WAF
 
 Zone-level Web Application Firewall (WAF) detects and mitigates malicious requests across all traffic under this zone.
 
@@ -480,7 +463,7 @@ Geo Block custom rule added
 
 IP Access Rules - IP Access Rules can be based on IP address, IP address range, Autonomous System Number (ASN) or country.
 
-###### DDoS
+##### DDoS
 
 Automatic DDoS protection that constantly analyzes traffic and generates real-time signatures to mitigate attacks across the network and application layers.
 
@@ -496,7 +479,7 @@ SSL/TLS DDoS attack protection - Automatic mitigation of SSL/TLS based DDoS atta
 
 Network-layer DDoS attack protection - Automatic mitigation of network-layer DDoS attacks such as ACK floods, SYN-ACK amplification attacks, UDP attacks, ICMP attacks and DDoS attacks launched by botnets such as Mirai.
 
-###### Network
+##### Network
 
 IPv6 Compatibility - Enabled
 
@@ -506,11 +489,11 @@ WebSockets - Enabled
 
 Allow WebSockets connections to your origin server.
 
-###### Web3
+##### Web3
 
 Develop Web3 applications without having to run infrastructure.
 
-##### Configuring for Full (Strict) SSL/TLS
+### Configuring for Full (Strict) SSL/TLS
 
 Generate SSL/TLS Origin Server certificate and key to install in HCL Domino certmgr.nsf (on S1) and used by S2 & S3. Follow the steps below to generate a certificate on your origin server:
 
@@ -536,7 +519,7 @@ Copy the contents of your private key below to your web server and set file perm
 
 Web Server for Installation: Instructions specific to HCL Domino are given separately.
 
-###### Cloudflare configuration on VPS2 and VPS3 
+#### Cloudflare configuration on VPS2 and VPS3 
 
 Configure firewall to allow IP addresses of origin server
 
@@ -544,7 +527,7 @@ https://developers.cloudflare.com/fundamentals/setup/allow-cloudflare-ip-address
 
 https://www.cloudflare.com/ips/
 
-###### Configure HCL Domino servers
+#### Configure HCL Domino servers
 
 **CertMgr configuration**
 
@@ -660,7 +643,7 @@ CertMgr: Shutdown
 
 S1 is not configured for Internet (https) access. Hence, once the additional servers S2 and S3 (with https active) are added and replication to S1 server is done, open CertMgr on S2 and S3, open the issued certificate and add S2/ACME and S3/ACME to the Servers with access. This will enable S2 and S3 servers to also use the TLS certificates
 
-###### Use Zoho Mail and Mail Relay for HCL Domino
+### Use Zoho Mail and Mail Relay for HCL Domino
 
 Configuring S3/ACME for email routing of [users@acme.org](mailto:users@acme.org) through Zoho Mail
 
@@ -710,7 +693,7 @@ User [admin@acme.org](mailto:admin@acme.org) exists only in Zoho mail server
 
 User [user2@acme.org](mailto:user2@acme.org) exists only in Domino mail server
 
-###### Configure S3/ACME to relay mail through Zoho ACME setup
+#### Configure S3/ACME to relay mail through Zoho ACME setup
 
 Configuration Document
 
@@ -744,7 +727,7 @@ The Domino SMTP server is configured with the DKIM signing. The setup is done us
 
 following link [https://help.hcltechsw.com/domino/12.0.2/admin/conf_dkimsigning.html](https://help.hcltechsw.com/domino/12.0.2/admin/conf_dkimsigning.html)
 
-###### Configure Email Routing in Zoho Mail
+#### Configure Email Routing in Zoho Mail
 
 Add new routing configuration:
 
@@ -759,9 +742,9 @@ Inbound Gateway
 Outbound Gateway
 
 
-##### Zero Trust configuration
+### Zero Trust configuration
 
-Settings-Downloads
+#### Settings-Downloads
 
 Download certificate and deploy it to your end users' browsers. If the browser is not using this certificate, the user will encounter a browser error for HTTPS connections.
 
@@ -813,27 +796,27 @@ https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/ge
 
 https://developers.cloudflare.com/fundamentals/setup/account-setup/add-site/
 
-Settings-WARP Client
+#### Settings-WARP Client
 
 Manage preferences for the WARP client
 
-Settings-Custom Pages
+#### Settings-Custom Pages
 
 Personalize the Cloudflare Zero Trust experience for your end-users.
 
-Settings-Network
+#### Settings-Network
 
 Manage your filtering preferences for outbound traffic.
 
-Settings-Authentication
+#### Settings-Authentication
 
 Set global preferences for applications protected behind Access.
 
-###### My Team-Devices
+#### My Team-Devices
 
 Cloudflare Zero Trust allows you to establish which users in your organization can enroll new devices or revoke access to connected devices.
 
-My Team-Devices-Connect a device
+##### My Team-Devices-Connect a device
 
 1. Create a device enrollment policy
 
@@ -867,19 +850,19 @@ Cloudflare Access can send a one-time PIN (OTP) to approved email addresses as a
 
 For example, if your team uses Okta® or Keycloak but you are collaborating with someone outside your organization, you can use OTP to grant access to guests.
 
-Set up OTP
+##### Set up OTP
 
 In Zero Trust, go to Settings > Authentication.
 
 Under Login methods, select Add new.
 
-Select One-time PIN.
+##### Select One-time PIN.
 
 If your organization uses a third-party email scanning service (for example, Mimecast or Barracuda), add noreply@notify.cloudflare.com to the email scanning allowlist.
 
 To grant a user access to an application, simply add their email address to an Access policy.
 
-Log in with OTP
+##### Log in with OTP
 
 To log in to Access using the one-time PIN:
 
